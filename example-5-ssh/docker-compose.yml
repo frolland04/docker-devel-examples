@@ -1,0 +1,16 @@
+services:
+  test-ssh:
+    image: test-ssh
+    privileged: false
+    build:
+      no_cache: false
+      context: ./files
+      network: host
+      args:
+        - HTTP_PROXY=${HTTP_PROXY}
+        - SSH_SOURCE_DIR=/root/.ssh.BIND
+        - UID=${P_UID}
+        - GID=${P_GID}
+    volumes:
+      - ./.ssh:/root/.ssh.BIND:ro
+    restart: no
