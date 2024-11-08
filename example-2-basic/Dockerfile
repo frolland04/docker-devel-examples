@@ -1,11 +1,12 @@
 FROM ubuntu
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 
 # Package manager setup
 # *********************
-RUN apt update && apt install -y build-essential nano lsb-release 
+RUN apt update && \
+    apt install -y build-essential python3 nano lsb-release iputils-ping
 
 # Set the timezone
 # ****************
@@ -22,4 +23,3 @@ RUN apt install -y x11-utils x11-apps
 # Graphical tools
 # ***************
 RUN apt install -y nedit
-

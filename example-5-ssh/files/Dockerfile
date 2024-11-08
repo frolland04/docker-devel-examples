@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 # Keep docker build fully automated
 # *********************************
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 
 
@@ -17,12 +17,14 @@ RUN apt update && \
         git \
         gosu \
         gpg \
+        iputils-ping \
         libssl-dev \
         locales \
         lsb-release \
         nano \
         openssh-client \
         openssl \
+        python3 \
         sudo \
         tzdata \
         wget
@@ -78,7 +80,7 @@ EOF
 # ********************************
 # Polishing end-user environnement
 # ********************************
-ENV DEBIAN_FRONTEND=dialog
+ARG DEBIAN_FRONTEND=dialog
 
 RUN <<EOF
     set -aeu
@@ -117,7 +119,14 @@ COPY <<EOF "${ENTRYPOINT_SCRIPT}"
     ls -al ${SSH_KEYSTORE_DIR}
     cat ${SSH_KEYSTORE_DIR}/config | grep ^Host || true
 
-    echo "Welcome."
+    echo ""
+    echo "Welcome!"
+    echo "********"
+    echo ""
+    echo "You can try using commands like 'id', 'hostname', 'ls -al', 'g++ --version', 'python3 --version', 'lsb_release -a' or even 'ping 8.8.8.8'"
+    echo "You can also try using 'git' or 'ssh' with an URL that requires a given ssh key and/or config. Please have a look into 'example-5-ssh/.ssh' before starting the container and provides the needed credentials and/or configuration"
+    echo "Hit CTRL-D or enter 'exit' to finish."
+    echo ""
     cd ${START_DIR}
     gosu ${USERNAME} /bin/bash
 EOF
